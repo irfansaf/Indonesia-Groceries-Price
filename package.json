@@ -4,7 +4,11 @@
   "description": "",
   "main": "app.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "python app.py",
+    "dev": "python app.py",
+    "build": "npx tailwindcss-cli@latest build -i ./static/global.css -o ./static/app.css",
+    "watch": "npx tailwindcss-cli@latest build -i ./static/global.css -o ./static/app.css --watch"
   },
   "keywords": [],
   "author": "",
