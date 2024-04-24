@@ -44,5 +44,29 @@ def get_prices_by_commodity(commodity):
     return jsonify(prices)
 
 
+@app.route('/price/commodity/<commodity>/<date>')
+def get_prices_by_commodity_and_date(commodity, date):
+    # Get the prices for the given commodity
+    price = data.loc[data['Komoditas (Rp)'] == commodity, date].values[0]
+
+    return jsonify({commodity: price})
+
+
+@app.route('/list/commodity')
+def list_commodity():
+    # Get the list of commodities
+    commodities = data['Komoditas (Rp)'].unique()
+
+    return jsonify(commodities.tolist())
+
+
+@app.route('/list/date')
+def list_date():
+    # Get the list of dates
+    dates = data.columns[2:]
+
+    return jsonify(dates.tolist())
+
+
 if __name__ == '__main__':
     app.run(debug=True)
