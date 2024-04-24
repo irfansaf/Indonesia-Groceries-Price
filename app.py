@@ -10,6 +10,12 @@ data = load_data("data/harga_cleaned.csv")
 
 @app.route('/')
 def home():
+    prices_2021 = data.set_index('Komoditas (Rp)')['2021'].to_dict()
+    prices_2022 = data.set_index('Komoditas (Rp)')['2022'].to_dict()
+    prices_2023 = data.set_index('Komoditas (Rp)')['2023'].to_dict()
+    prices_2024 = data.set_index('Komoditas (Rp)')['2024'].to_dict()
+
+    print(prices_2021)
     return render_template('index.html')
 
 
