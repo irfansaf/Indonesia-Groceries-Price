@@ -588,16 +588,12 @@ video {
   }
 }
 
-.collapse {
-  visibility: collapse;
-}
-
 .block {
   display: block;
 }
 
-.table {
-  display: table;
+.grid {
+  display: grid;
 }
 
 .bg-red-600 {
@@ -605,7 +601,6 @@ video {
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
-.bg-blue-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }

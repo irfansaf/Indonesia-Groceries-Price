@@ -7,6 +7,75 @@
 {% block content %}
     <div class="container">
         <h1>Dashboard</h1>
-    <canvas id="myChart"></canvas>
+        <canvas id="myChart"></canvas>
+    </div>
+{% endblock %}
 
+{% block script %}
+    <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+    <script>
+        fetch('/price')
+        .then(response => response.json())
+        .then(data => {
+            // Prepare the labels for the chart
+            const datasets = Object.keys(data);
+
+            // Prepare the datasets for the chart
+            const labels = Object.entries(data[datasets[0]]).map(([commodity, _]) => {
+                return {
+                    label: commodity,
+                    data: datasets.map(date => data[date][commodity]),
+                    fill: false
+                };
+            });
+
+            // Create the chart
+            const ctx = document.getElementById('myChart');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.map(label => label.label),
+                    datasets: datasets.map((dataset, index) => {
+                        return {
+                            label: dataset,
+                            data: labels.map(label => label.data[index]),
+                            fill: false,
+                            borderColor: '#' + Math.floor(Math.random()*16777215).toString(16)
+                        };
+                    })
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    responsive: true,
+                    interaction: {
+                      mode: 'index',
+                      intersect: false,
+                    },
+                },
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'xy',
+                            speed: 10,
+                            threshold: 10
+                        },
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'xy',
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}

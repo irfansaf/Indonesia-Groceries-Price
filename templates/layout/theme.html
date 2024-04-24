@@ -21,46 +21,8 @@
         <canvas id="myChart"></canvas>
     </div>
 
-    <script>
-      const ctx = document.getElementById('myChart');
-
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [{
-            label: '2021',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1
-          },
-            {
-                label: '2022',
-                data: [10, 15, 5, 7, 3, 4],
-                borderWidth: 1
-            },
-            {
-                label: '2023',
-                data: [8, 12, 7, 9, 4, 5],
-                borderWidth: 1
-            },
-            {
-                label: '2024',
-                data: [0, 1, 2, 3, 4, 5],
-                borderWidth: 1
-            }
-          ]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    </script>
-
-
-
+    <script src="{{url_for('static',filename='js/chartjs-plugin-zoom.js')}}"></script>
+    {% block script %}
+    {% endblock %}
 </body>
 </html>
