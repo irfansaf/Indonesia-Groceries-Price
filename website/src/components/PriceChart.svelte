@@ -1,10 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { Chart, registerables } from 'chart.js';
+    import {Chart, type ChartType, registerables} from 'chart.js';
     import 'chartjs-adapter-date-fns';
     import { enUS } from 'date-fns/locale';
 
     let priceData: { name: string, price: { [date: string]: number } }[] = [];
+    let selectedGroceries: string[] = [];
 
     async function fetchPriceData() {
         try {
@@ -17,7 +18,8 @@
     }
 
     function transformData(data: { name: string, price: { [date: string]: number } }[]) {
-        return data.map(item => {
+        return data
+            .map(item => {
             const prices = Object.entries(item.price).map(([date, price]) => ({ x: date, y: price }));
             return { label: item.name, data: prices };
         });
@@ -38,7 +40,7 @@
             const ctx = canvas.getContext('2d');
 
             if (ctx) {
-                new Chart(ctx, {
+                const chart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         datasets: chartData
@@ -79,6 +81,13 @@
                         }
                     }
                 });
+
+                document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        selectedGroceries = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+                        updateChart(chart, selectedGroceries);
+                    });
+                });
             } else {
                 console.error('Failed to get 2D rendering context for canvas element');
             }
@@ -86,12 +95,30 @@
             console.error('Canvas element not found');
         }
     });
+
+    function updateChart(chart: Chart<ChartType, { x: string; y: number }[], unknown>, selectedGroceries: string[]): void {
+        // Filter data based on selected groceries
+        const filteredData = priceData.filter(item => selectedGroceries.includes(item.name));
+        const chartData = transformData(filteredData);
+
+        // Update chart data
+        chart.data.datasets = chartData;
+        chart.update();
+    }
 </script>
 
+<div>
+    {#each priceData as item}
+        <label>
+            <input type="checkbox" value={item.name} checked={selectedGroceries.includes(item.name)} />
+            {item.name}
+        </label>
+    {/each}
+</div>
 <canvas id="priceChart" width="400" height="400"></canvas>
 
-<svelte:head>
-    <script>
-        fetchPriceData(); // Fetch data when the component is mounted
-    </script>
-</svelte:head>
+<!--<svelte:head>-->
+<!--    <script>-->
+<!--        fetchPriceData(); // Fetch data when the component is mounted-->
+<!--    </script>-->
+<!--</svelte:head>-->
