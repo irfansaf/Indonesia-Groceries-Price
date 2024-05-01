@@ -1,4 +1,5 @@
-from flask import Flask, render_template, jsonify
+import pandas as pd
+from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 
 from inference.load_data import load_data
@@ -18,13 +19,35 @@ def home():
 
 @app.route('/price')
 def get_all_prices():
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+
+    if start_date and end_date:
+        # Convert the dates to pandas datetime format and normalize to remove the time component
+        start_date = pd.to_datetime(start_date).normalize()
+        end_date = pd.to_datetime(end_date).normalize()
+
+        # Convert the DataFrame columns to datetime, excluding non-datetime columns
+        datetime_columns = pd.to_datetime(data.columns[2:], errors='coerce')
+
+        # Create a boolean mask that checks if the dates in the DataFrame are within the provided date range
+        mask = (datetime_columns >= start_date) & (datetime_columns <= end_date)
+
+        # Filter the data based on the mask and concatenate with the first two columns
+        filtered_data = pd.concat([data.iloc[:, :2], data.loc[:, data.columns[2:][mask]]], axis=1)
+    else:
+        # If no dates are provided, use the entire data
+        filtered_data = data
+
     prices = []
-    for index, row in data.iterrows():
+    for index, row in filtered_data.iterrows():
         groceries = {
             "name": row['Komoditas (Rp)'],
-            "price": row.drop(['No', 'Komoditas (Rp)']).to_dict()
+            "price": row.drop(['No', 'Komoditas (Rp)']).to_dict(),
+            "category": row['No']
         }
         prices.append(groceries)
+
     return jsonify({"groceries": prices})
 
 
