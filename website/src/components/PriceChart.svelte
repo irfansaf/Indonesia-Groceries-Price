@@ -24,11 +24,13 @@
     }
 
     onMount(async () => {
+        const {default: ZoomPlugin} = await import('chartjs-plugin-zoom');
+
         await fetchPriceData();
 
         const chartData = transformData(priceData);
 
-        Chart.register(...registerables);
+        Chart.register(ZoomPlugin, ...registerables);
 
         const canvas = document.getElementById('priceChart');
 
@@ -57,6 +59,23 @@
                                     text: 'Price (IDR)'
                                 }
                             }
+                        },
+                        plugins: {
+                            zoom: {
+                                zoom: {
+                                    wheel: {
+                                        enabled: true
+                                    },
+                                    pinch: {
+                                        enabled: true
+                                    },
+                                    mode: 'xy'
+                                },
+                                pan: {
+                                    enabled: true,
+                                    mode: 'xy'
+                                }
+                            }
                         }
                     }
                 });
@@ -70,3 +89,9 @@
 </script>
 
 <canvas id="priceChart" width="400" height="400"></canvas>
+
+<svelte:head>
+    <script>
+        fetchPriceData(); // Fetch data when the component is mounted
+    </script>
+</svelte:head>
