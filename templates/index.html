@@ -31,6 +31,7 @@
 
             // Create the chart
             const ctx = document.getElementById('myChart');
+            Chart.register(ChartZoom);
             new Chart(ctx, {
                 type: 'line',
                 data: {

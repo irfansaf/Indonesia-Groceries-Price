@@ -1,8 +1,10 @@
 from flask import Flask, render_template, jsonify
+from flask_cors import CORS
 
 from inference.load_data import load_data
 
 app = Flask(__name__)
+CORS(app)
 
 # Load data
 data = load_data("data/harga_cleaned.csv")
@@ -16,13 +18,14 @@ def home():
 
 @app.route('/price')
 def get_all_prices():
-    # Transpose the data so that the dates are the keys
-    transposed_data = data.set_index('Komoditas (Rp)').T
-
-    # Convert the transposed data to a dictionary
-    prices = transposed_data.to_dict()
-
-    return jsonify(prices)
+    prices = []
+    for index, row in data.iterrows():
+        groceries = {
+            "name": row['Komoditas (Rp)'],
+            "price": row.drop(['No', 'Komoditas (Rp)']).to_dict()
+        }
+        prices.append(groceries)
+    return jsonify({"groceries": prices})
 
 
 @app.route('/price/<date>')
