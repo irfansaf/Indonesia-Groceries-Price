@@ -159,10 +159,10 @@
         <h1 class="text-2xl">Indonesia Groceries Price History</h1>
     </nav>
 
-    <div class="flex flex-1">
+    <div class="flex flex-1 flex-col md:flex-row">
         <!-- Left column for charts -->
-        <div class="w-3/4 p-4">
-            <div class="flex justify-between gap-5">
+        <div class="w-full md:w-3/4 p-4">
+            <div class="flex flex-col md:flex-row justify-between gap-5">
                 <div class="mb-3">
                     <input type="date" id="startDate" bind:value={startDate} class="p-2 border rounded-md mr-2" />
                     <input type="date" id="endDate" bind:value={endDate} class="p-2 border rounded-md mr-2" />
@@ -179,20 +179,20 @@
             </div>
 
             <div class="flex justify-center">
-                <canvas id="priceChart" width="400" height="230"></canvas>
+                <canvas id="priceChart" style="max-width: 100%; height: auto;"></canvas>
             </div>
         </div>
 
         <!-- Right column for groceries list -->
-        <div class="w-1/4 p-4">
+        <div class="w-full md:w-1/4 p-4">
             <h2 class="text-xl mb-1">Groceries List</h2>
             <div class="flex items-center gap-2">
-                <input type="checkbox" id="selectAll" />
+                <input type="checkbox" id="selectAll"  />
                 <label for="selectAll">Select All</label>
             </div>
             <div class="flex flex-col gap-2 overflow-auto" style="max-height: 650px;">
                 {#each priceData as item}
-                    <div class="w-[320px] space-y-2">
+                    <div class="w-full md:w-[320px] space-y-2">
                         <div class="flex items-baseline gap-5 rounded-md border px-4 py-3 font-mono text-sm">
                             <input type="checkbox" value={item.name} checked={selectedGroceries.includes(item.name)} />
                             <div class="">{item.name}</div>
