@@ -13,7 +13,7 @@
     async function fetchPriceData() {
         try {
             const response = await fetch('http://127.0.0.1:5000/price?start_date=' + startDate + '&end_date=' + endDate);
-            console.log(response)
+            // console.log(response)
             const data = await response.json();
             priceData = data.groceries;
             selectedGroceries = priceData.map(item => item.name);
