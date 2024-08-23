@@ -60,11 +60,11 @@ We welcome contributions to improve this project. Please feel free to open issue
 
 ## Team Members
 
-- Irfan Saf
-- Joanatan Setiaji
-- Kevin Marchanda
-- Muhammad Ilham
-- Zulfikar Ahmad
+- [Irfan Saf](https://github.com/irfansaf)
+- [Joanatan Setiaji]()
+- [Kevin Marchanda]()
+- [Muhammad Ilham](https://github.com/Sytherrr)
+- [Zulfikar Ahmad](https://github.com/EvanescenT07)
 
 ## License
 
